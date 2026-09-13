@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ImmoPreBid | Immobilien vor dem Zwangsversteigerungstermin</title>
+    <meta
+      name="description"
+      content="Professioneller Immobilien-Vorverkauf mit einwöchiger Online-Auktion für ernsthafte Bieter und Banken."
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: '#edf6ff',
+                100: '#dfeeff',
+                200: '#c6e3ff',
+                300: '#9ed0ff',
+                400: '#62aaf8',
+                500: '#2f7fe7',
+                600: '#2368c7',
+                700: '#1c509d',
+                800: '#1a4279',
+                900: '#17365f'
+              }
+            },
+            boxShadow: {
+              soft: '0 18px 50px -22px rgba(15, 23, 42, 0.26)'
+            }
+          }
+        }
+      };
+    </script>
+    <style>
+      html { scroll-behavior: smooth; }
+      body {
+        font-family: Inter, 'Segoe UI', sans-serif;
+        background: linear-gradient(180deg, #f8fbff 0%, #eef5fb 100%);
+      }
+      .fade-up { animation: fadeUp 0.35s ease; }
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .property-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+      .property-card:hover { transform: translateY(-4px); box-shadow: 0 22px 50px -28px rgba(15, 23, 42, 0.28); }
+      .countdown-box { min-width: 60px; }
+      .faq-item.open .faq-answer { display: block; }
+      .faq-item:not(.open) .faq-answer { display: none; }
+    </style>
+  </head>
+  <body class="text-slate-800">
+    <header class="bg-slate-950 text-white">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <nav class="flex items-center justify-between py-4">
+          <div class="flex items-center gap-3">
+            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-400 to-brand-700 text-lg font-bold shadow-soft">IP</div>
+            <div>
+              <div class="text-lg font-bold tracking-tight">ImmoPreBid</div>
+              <div class="text-[10px] uppercase tracking-[0.26em] text-slate-300">Versteigerungsvorverkauf</div>
+            </div>
+          </div>
+
+          <div class="hidden items-center gap-8 text-sm text-slate-300 md:flex">
+            <a href="#markt" class="transition hover:text-white">Markt</a>
+            <a href="#verfahren" class="transition hover:text-white">Verfahren</a>
+            <a href="#vertrauen" class="transition hover:text-white">Vertrauen</a>
+            <a href="#faq" class="transition hover:text-white">FAQ</a>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button type="button" class="login-trigger hidden rounded-full border border-slate-700 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-slate-500 hover:text-white sm:inline-flex">
+              Für Banken
+            </button>
+            <button type="button" class="login-trigger rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">
+              Anmelden
+            </button>
+          </div>
+        </nav>
+
+        <div class="grid gap-10 pb-16 pt-8 lg:grid-cols-[1.4fr_0.9fr] lg:items-end lg:pb-20 lg:pt-12">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.26em] text-sky-300">Immobilien vor dem Zwangsversteigerungstermin online sichern</p>
+            <h1 class="mt-5 max-w-3xl text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
+              Immobilien mit Klarheit, Vertrauen und professioneller Verhandlung.
+            </h1>
+            <p class="mt-6 max-w-xl text-base leading-7 text-slate-300 sm:text-lg">
+              Erwerb im freihändigen Verkauf vor der offiziellen Versteigerung – mit Zustimmung der Gläubigerbank,
+              transparentem Bietprozess und kontrollierter Frist.
+            </p>
+
+            <div class="mt-8 flex flex-wrap gap-4">
+              <a href="#markt" class="inline-flex items-center rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white shadow-soft transition hover:bg-brand-400">Verfügbare Objekte ansehen</a>
+              <button type="button" class="login-trigger inline-flex items-center rounded-full border border-slate-600 bg-slate-800/70 px-6 py-3 text-sm font-semibold text-slate-100 transition hover:border-slate-400 hover:bg-slate-700">Als Bieter registrieren</button>
+            </div>
+
+            <div class="mt-12 grid gap-4 sm:grid-cols-3">
+              <div class="rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
+                <div class="text-[11px] uppercase tracking-[0.2em] text-slate-400">Aktuell</div>
+                <div class="mt-2 text-3xl font-bold text-white">24</div>
+                <div class="mt-1 text-sm text-slate-300">Objekte in der Auktion</div>
+              </div>
+              <div class="rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
+                <div class="text-[11px] uppercase tracking-[0.2em] text-slate-400">Frist</div>
+                <div class="mt-2 text-3xl font-bold text-white">7 Tage</div>
+                <div class="mt-1 text-sm text-slate-300">Online-Bietphase</div>
+              </div>
+              <div class="rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
+                <div class="text-[11px] uppercase tracking-[0.2em] text-slate-400">Zuschlag</div>
+                <div class="mt-2 text-3xl font-bold text-white">94%</div>
+                <div class="mt-1 text-sm text-slate-300">Verkehrswert erfüllt</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-[28px] border border-white/10 bg-white/5 p-5 shadow-soft backdrop-blur-sm">
+            <div class="rounded-2xl border border-white/10 bg-gradient-to-br from-brand-700 via-brand-600 to-brand-400 p-4 text-white">
+              <div class="text-xs font-semibold uppercase tracking-[0.22em] text-brand-100">Nächste Auktion</div>
+              <div class="mt-4 rounded-2xl bg-white/10 p-4 backdrop-blur-sm">
+                <div class="text-[11px] uppercase tracking-[0.2em] text-sky-100">Auktionsende</div>
+                <div class="mt-3 grid grid-cols-4 gap-2 text-center">
+                  <div class="countdown-box rounded-xl bg-white/10 p-2"><div class="text-2xl font-bold" data-unit="days">04</div><div class="text-[10px] uppercase tracking-[0.2em] text-sky-100">Tage</div></div>
+                  <div class="countdown-box rounded-xl bg-white/10 p-2"><div class="text-2xl font-bold" data-unit="hours">12</div><div class="text-[10px] uppercase tracking-[0.2em] text-sky-100">Std.</div></div>
+                  <div class="countdown-box rounded-xl bg-white/10 p-2"><div class="text-2xl font-bold" data-unit="minutes">08</div><div class="text-[10px] uppercase tracking-[0.2em] text-sky-100">Min.</div></div>
+                  <div class="countdown-box rounded-xl bg-white/10 p-2"><div class="text-2xl font-bold" data-unit="seconds">17</div><div class="text-[10px] uppercase tracking-[0.2em] text-sky-100">Sek.</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-5 space-y-3 text-sm text-slate-200">
+              <div class="flex items-center justify-between rounded-xl bg-slate-900/70 px-3 py-2"><span>Erfolgsquote</span><strong class="text-white">67%</strong></div>
+              <div class="flex items-center justify-between rounded-xl bg-slate-900/70 px-3 py-2"><span>Legal review</span><strong class="text-emerald-300">Verifiziert</strong></div>
+              <div class="flex items-center justify-between rounded-xl bg-slate-900/70 px-3 py-2"><span>Bankkontakt</span><strong class="text-white">Direkt</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <section id="markt" class="mb-8">
+        <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.22em] text-brand-700">Markt</p>
+            <h2 class="mt-2 text-3xl font-bold tracking-tight text-slate-900">Aktuell verfügbare Immobilien</h2>
+          </div>
+          <div class="flex items-center gap-3 rounded-full border border-slate-200 bg-white p-2 shadow-sm">
+            <span class="px-3 text-sm text-slate-500">Sortieren</span>
+            <select id="sortSelect" class="rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700 focus:outline-none">
+              <option value="newest">Neueste Objekte</option>
+              <option value="highest">Höchster Verkehrswert</option>
+              <option value="fastest">Verkürzter Countdown</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mb-8 rounded-[28px] border border-slate-200 bg-white p-4 shadow-soft sm:p-5">
+          <div class="grid gap-4 lg:grid-cols-[1.3fr_0.8fr_0.8fr]">
+            <label class="block">
+              <span class="mb-2 block text-sm font-medium text-slate-700">Suche</span>
+              <input id="searchInput" type="text" placeholder="Adresse, Stadt oder Objekt…" class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-brand-400 focus:bg-white focus:ring-2 focus:ring-brand-100" />
+            </label>
+            <label class="block">
+              <span class="mb-2 block text-sm font-medium text-slate-700">Standort</span>
+              <select id="cityFilter" class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-brand-400 focus:bg-white focus:ring-2 focus:ring-brand-100">
+                <option value="all">Alle Städte</option>
+                <option value="Hannover">Hannover</option>
+                <option value="Peine">Peine</option>
+                <option value="Langenhagen">Langenhagen</option>
+              </select>
+            </label>
+            <label class="block">
+              <span class="mb-2 block text-sm font-medium text-slate-700">Objekttyp</span>
+              <select id="typeFilter" class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-brand-400 focus:bg-white focus:ring-2 focus:ring-brand-100">
+                <option value="all">Alle Typen</option>
+                <option value="Wohnung">Wohnung</option>
+                <option value="Einfamilienhaus">Einfamilienhaus</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div id="propertyGrid" class="grid gap-6 md:grid-cols-2 xl:grid-cols-3"></div>
+      </section>
+
+      <section id="verfahren" class="mt-18 grid gap-8 rounded-[30px] border border-slate-200 bg-white p-8 shadow-soft lg:grid-cols-[1.1fr_0.9fr]">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.22em] text-brand-700">Verfahren</p>
+          <h3 class="mt-3 text-3xl font-bold tracking-tight text-slate-900">Professioneller Bietprozess für ernsthafte Käufer</h3>
+          <p class="mt-4 text-base leading-7 text-slate-600">
+            Der freihändige Verkauf ist ein transparentes, prüfbares Verfahren: Nach einer einwöchigen Online-Auktionsphase
+            wird die Gläubigerbank über das höchste verifizierte Angebot informiert und entscheidet über den Zuschlag.
+          </p>
+
+          <div class="mt-8 space-y-5">
+            <div class="flex gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100 font-bold text-brand-700">1</div>
+              <div>
+                <h4 class="font-semibold text-slate-900">Online mitbieten</h4>
+                <p class="mt-1 text-sm leading-6 text-slate-600">Bieter legen ihr Kaufinteresse und Gebot innerhalb der sieben Tage verbindlich online offen.</p>
+              </div>
+            </div>
+            <div class="flex gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100 font-bold text-brand-700">2</div>
+              <div>
+                <h4 class="font-semibold text-slate-900">Bank erhält Höchstgebot</h4>
+                <p class="mt-1 text-sm leading-6 text-slate-600">Nach Auktionsende werden die Kontaktdaten des Höchstbietenden an die Gläubigerbank weitergeleitet.</p>
+              </div>
+            </div>
+            <div class="flex gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100 font-bold text-brand-700">3</div>
+              <div>
+                <h4 class="font-semibold text-slate-900">Zuschlag durch die Bank</h4>
+                <p class="mt-1 text-sm leading-6 text-slate-600">Die Gläubigerbank prüft das Angebot und entscheidet über den Abschluss für den freihändigen Verkauf.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="vertrauen" class="rounded-[28px] bg-slate-900 p-6 text-white shadow-soft">
+          <div class="flex items-center justify-between">
+            <p class="text-xs font-semibold uppercase tracking-[0.22em] text-sky-200">Sicherheitsstandard</p>
+            <span class="rounded-full bg-emerald-500/20 px-2.5 py-1 text-xs font-semibold text-emerald-300">Verifiziert</span>
+          </div>
+          <div class="mt-6 space-y-5">
+            <div class="rounded-2xl border border-slate-700 bg-slate-800/60 p-4">
+              <div class="text-sm text-slate-300">Identitätsprüfung</div>
+              <div class="mt-2 text-xl font-bold">Ausweis + Risikocheck</div>
+            </div>
+            <div class="rounded-2xl border border-slate-700 bg-slate-800/60 p-4">
+              <div class="text-sm text-slate-300">Finanzierungsnachweis</div>
+              <div class="mt-2 text-xl font-bold">Bestätigung der Kaufkraft erforderlich</div>
+            </div>
+            <div class="rounded-2xl border border-slate-700 bg-slate-800/60 p-4">
+              <div class="text-sm text-slate-300">Auktionsprozess</div>
+              <div class="mt-2 text-xl font-bold">Transparent, dokumentiert und nachvollziehbar</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="faq" class="mt-16 rounded-[30px] border border-slate-200 bg-white p-8 shadow-soft">
+        <div class="mb-6">
+          <p class="text-xs font-semibold uppercase tracking-[0.22em] text-brand-700">FAQ & Vertrauen</p>
+          <h3 class="mt-2 text-3xl font-bold tracking-tight text-slate-900">Häufige Fragen zu Bietprozess und Sicherheit</h3>
+        </div>
+
+        <div class="grid gap-4 lg:grid-cols-2">
+          <div class="faq-item open rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <button class="faq-toggle flex w-full items-center justify-between gap-3 text-left" type="button">
+              <span class="text-base font-semibold text-slate-900">Wer darf mitbieten?</span>
+              <span class="text-xl text-brand-700">+</span>
+            </button>
+            <div class="faq-answer mt-3 text-sm leading-6 text-slate-600">Ernsthafte Käufer mit verifizierter Identität, Nachweis der Finanzierungsfähigkeit und gültiger Konto- oder Kontaktfreigabe dürfen mitbieten.</div>
+          </div>
+          <div class="faq-item open rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <button class="faq-toggle flex w-full items-center justify-between gap-3 text-left" type="button">
+              <span class="text-base font-semibold text-slate-900">Ist der Prozess rechtskonform?</span>
+              <span class="text-xl text-brand-700">+</span>
+            </button>
+            <div class="faq-answer mt-3 text-sm leading-6 text-slate-600">Ja. Der Vorverkauf erfolgt mit Zustimmung der Gläubigerbank und innerhalb eines transparenten, dokumentierten Verfahrens, das vor einem offiziellen Zwangsversteigerungstermin stattfindet.</div>
+          </div>
+          <div class="faq-item open rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <button class="faq-toggle flex w-full items-center justify-between gap-3 text-left" type="button">
+              <span class="text-base font-semibold text-slate-900">Wie läuft ein Zuschlag ab?</span>
+              <span class="text-xl text-brand-700">+</span>
+            </button>
+            <div class="faq-answer mt-3 text-sm leading-6 text-slate-600">Nach Ablauf der Frist wird das höchste verifizierte Gebot an die Bank übermittelt. Die Gläubigerbank prüft die Angaben und entscheidet über den Zuschlag.</div>
+          </div>
+          <div class="faq-item open rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <button class="faq-toggle flex w-full items-center justify-between gap-3 text-left" type="button">
+              <span class="text-base font-semibold text-slate-900">Welche Informationen werden geprüft?</span>
+              <span class="text-xl text-brand-700">+</span>
+            </button>
+            <div class="faq-answer mt-3 text-sm leading-6 text-slate-600">Identität, Finanzierungsfähigkeit, Zahlungsfähigkeit und die Einhaltung der Auktionsbedingungen. Bank- und Maklerzugriff erfolgt nur mit verifizierter Rolle.</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer id="kontakt" class="mt-16 border-t border-slate-200 bg-white/80">
+      <div class="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-8 text-sm text-slate-600 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+        <div><span class="font-bold text-slate-900">ImmoPreBid</span> – Immobilien vor dem Zwangsversteigerungstermin online sichern.</div>
+        <div class="flex gap-5">
+          <a href="#" class="transition hover:text-slate-900">Datenschutz</a>
+          <a href="#" class="transition hover:text-slate-900">AGB</a>
+          <a href="#" class="transition hover:text-slate-900">Kontakt</a>
+        </div>
+      </div>
+    </footer>
+
+    <div id="loginModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm">
+      <div class="w-full max-w-md rounded-[30px] bg-white p-6 shadow-2xl">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.22em] text-brand-700">Zugang</p>
+            <h3 class="mt-2 text-2xl font-bold text-slate-900">Bank- oder Makler-Login</h3>
+          </div>
+          <button type="button" class="close-login flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-xl text-slate-700 transition hover:bg-slate-200">×</button>
+        </div>
+
+        <div class="mt-5 grid grid-cols-2 gap-2 rounded-xl bg-slate-100 p-1">
+          <button type="button" class="role-btn active rounded-xl bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm" data-role="buyer">Bieter</button>
+          <button type="button" class="role-btn rounded-xl px-3 py-2 text-sm font-semibold text-slate-600" data-role="bank">Bank / Makler</button>
+        </div>
+
+        <form class="mt-6 space-y-4">
+          <div>
+            <label class="mb-2 block text-sm font-semibold text-slate-700">E-Mail oder Benutzername</label>
+            <input type="text" class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-brand-400 focus:bg-white focus:ring-2 focus:ring-brand-100" placeholder="name@unternehmen.de" />
+          </div>
+          <div>
+            <label class="mb-2 block text-sm font-semibold text-slate-700">Passwort</label>
+            <input type="password" class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-brand-400 focus:bg-white focus:ring-2 focus:ring-brand-100" placeholder="••••••••" />
+          </div>
+          <button type="submit" class="w-full rounded-full bg-brand-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-500">Anmelden</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      const properties = [
+        { id: 'villa-hannover', address: 'Schloßstraße 18', city: 'Peine', location: 'Peine / Hannover', type: 'Einfamilienhaus', valuation: 665000, currentBid: 538000, bidders: 8, rooms: '5,5', area: '162 m²', year: '2004', image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80', deadline: '2026-09-19T18:00:00' },
+        { id: 'apartment-hannover', address: 'Am Maschpark 7', city: 'Hannover', location: 'Hannover', type: 'Wohnung', valuation: 420000, currentBid: 359500, bidders: 11, rooms: '4', area: '91 m²', year: '1998', image: 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80', deadline: '2026-09-17T12:15:00' },
+        { id: 'villa-langenhagen', address: 'Bergweg 3', city: 'Langenhagen', location: 'Langenhagen', type: 'Einfamilienhaus', valuation: 830000, currentBid: 676000, bidders: 6, rooms: '6', area: '214 m²', year: '2011', image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80', deadline: '2026-09-20T09:30:00' }
+      ];
+
+      function money(value) {
+        return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(value);
+      }
+
+      function formatCountdown(deadline) {
+        const diff = new Date(deadline).getTime() - Date.now();
+        if (diff <= 0) return 'Auktion beendet';
+        const totalSeconds = Math.floor(diff / 1000);
+        const days = Math.floor(totalSeconds / 86400);
+        const hours = Math.floor((totalSeconds % 86400) / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        return `Noch ${days} Tage ${hours} Std. ${minutes} Min.`;
+      }
+
+      function updateHeroCountdown() {
+        const deadline = new Date('2026-09-20T18:00:00');
+        const diff = deadline.getTime() - Date.now();
+        if (diff <= 0) {
+          document.querySelectorAll('[data-unit]').forEach((el) => el.textContent = '00');
+          return;
+        }
+        const totalSeconds = Math.floor(diff / 1000);
+        const days = String(Math.floor(totalSeconds / 86400)).padStart(2, '0');
+        const hours = String(Math.floor((totalSeconds % 86400) / 3600)).padStart(2, '0');
+        const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+        const seconds = String(totalSeconds % 60).padStart(2, '0');
+        document.querySelector('[data-unit="days"]').textContent = days;
+        document.querySelector('[data-unit="hours"]').textContent = hours;
+        document.querySelector('[data-unit="minutes"]').textContent = minutes;
+        document.querySelector('[data-unit="seconds"]').textContent = seconds;
+      }
+
+      function renderProperties() {
+        const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+        const city = document.getElementById('cityFilter').value;
+        const type = document.getElementById('typeFilter').value;
+        const sort = document.getElementById('sortSelect').value;
+
+        let filtered = properties.filter((item) => {
+          const matchesSearch = !searchTerm || [item.address, item.city, item.location, item.type].join(' ').toLowerCase().includes(searchTerm);
+          const matchesCity = city === 'all' || item.city === city || item.location.includes(city);
+          const matchesType = type === 'all' || item.type === type;
+          return matchesSearch && matchesCity && matchesType;
+        });
+
+        if (sort === 'highest') filtered = [...filtered].sort((a, b) => b.valuation - a.valuation);
+        if (sort === 'fastest') filtered = [...filtered].sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
+
+        const grid = document.getElementById('propertyGrid');
+        if (!filtered.length) {
+          grid.innerHTML = '<div class="col-span-full rounded-[28px] border border-dashed border-slate-300 bg-white p-10 text-center text-slate-500">Keine Immobilien entsprechen den aktuellen Filtern.</div>';
+          return;
+        }
+
+        grid.innerHTML = filtered.map((property) => `
+          <article class="property-card fade-up overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-soft" data-property-id="${property.id}">
+            <img src="${property.image}" alt="${property.address}" class="h-64 w-full object-cover" />
+            <div class="p-6">
+              <div class="flex items-center justify-between gap-3 text-sm">
+                <span class="rounded-full bg-brand-50 px-2.5 py-1 font-medium text-brand-700">${property.location}</span>
+                <span class="font-semibold text-slate-500">Verkehrswert ${money(property.valuation)}</span>
+              </div>
+              <h3 class="mt-4 text-2xl font-bold tracking-tight text-slate-900">${property.address}</h3>
+              <div class="mt-5 grid grid-cols-3 gap-3 text-sm text-slate-600">
+                <div><div class="text-xs uppercase tracking-[0.18em] text-slate-400">Wohnfläche</div><div class="mt-1 font-semibold text-slate-800">${property.area}</div></div>
+                <div><div class="text-xs uppercase tracking-[0.18em] text-slate-400">Zimmer</div><div class="mt-1 font-semibold text-slate-800">${property.rooms}</div></div>
+                <div><div class="text-xs uppercase tracking-[0.18em] text-slate-400">Baujahr</div><div class="mt-1 font-semibold text-slate-800">${property.year}</div></div>
+              </div>
+              <div class="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <div class="text-[11px] uppercase tracking-[0.18em] text-slate-400">Akt. Höchstgebot</div>
+                    <div class="mt-1 text-2xl font-bold text-slate-900">${money(property.currentBid)}</div>
+                  </div>
+                  <div class="text-right">
+                    <div class="text-[11px] uppercase tracking-[0.18em] text-slate-400">Bieter</div>
+                    <div class="mt-1 text-lg font-bold text-slate-900">${property.bidders}</div>
+                  </div>
+                </div>
+                <div class="mt-4 flex items-center justify-between gap-3">
+                  <div class="countdown text-sm font-medium text-slate-600" data-deadline="${property.deadline}">${formatCountdown(property.deadline)}</div>
+                  <div class="flex gap-2">
+                    <a href="details.html?property=${property.id}" class="inline-flex items-center rounded-full bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-500">Details</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        `).join('');
+
+        document.querySelectorAll('.countdown').forEach((el) => {
+          const deadline = el.dataset.deadline;
+          el.textContent = formatCountdown(deadline);
+        });
+      }
+
+      function updateCountdownEls() {
+        document.querySelectorAll('.countdown').forEach((el) => {
+          el.textContent = formatCountdown(el.dataset.deadline);
+        });
+      }
+
+      document.getElementById('searchInput').addEventListener('input', renderProperties);
+      document.getElementById('cityFilter').addEventListener('change', renderProperties);
+      document.getElementById('typeFilter').addEventListener('change', renderProperties);
+      document.getElementById('sortSelect').addEventListener('change', renderProperties);
+
+      document.querySelectorAll('.faq-toggle').forEach((toggle) => {
+        toggle.addEventListener('click', () => {
+          const item = toggle.closest('.faq-item');
+          item.classList.toggle('open');
+          const label = toggle.querySelector('span:last-child');
+          label.textContent = item.classList.contains('open') ? '−' : '+';
+        });
+      });
+
+      document.querySelectorAll('.login-trigger').forEach((button) => {
+        button.addEventListener('click', () => {
+          document.getElementById('loginModal').classList.remove('hidden');
+          document.getElementById('loginModal').classList.add('flex');
+        });
+      });
+      document.querySelector('.close-login').addEventListener('click', () => {
+        document.getElementById('loginModal').classList.add('hidden');
+        document.getElementById('loginModal').classList.remove('flex');
+      });
+      document.getElementById('loginModal').addEventListener('click', (event) => {
+        if (event.target === event.currentTarget) {
+          event.currentTarget.classList.add('hidden');
+          event.currentTarget.classList.remove('flex');
+        }
+      });
+
+      document.querySelectorAll('.role-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.role-btn').forEach((b) => {
+            b.classList.remove('active', 'bg-white', 'shadow-sm');
+            b.classList.add('text-slate-600');
+          });
+          btn.classList.add('active', 'bg-white', 'shadow-sm', 'text-slate-900');
+          btn.classList.remove('text-slate-600');
+        });
+      });
+
+      document.getElementById('loginModal').querySelector('form').addEventListener('submit', (event) => {
+        event.preventDefault();
+        alert('Login simuliert – für die Demo freigegeben.');
+      });
+
+      renderProperties();
+      updateHeroCountdown();
+      updateCountdownEls();
+      setInterval(() => {
+        updateHeroCountdown();
+        updateCountdownEls();
+      }, 1000);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Immobilien-Detail | ImmoPreBid</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: '#edf6ff',
+                100: '#dfeeff',
+                200: '#c6e3ff',
+                300: '#9ed0ff',
+                400: '#62aaf8',
+                500: '#2f7fe7',
+                600: '#2368c7',
+                700: '#1c509d',
+                800: '#1a4279',
+                900: '#17365f'
+              }
+            },
+            boxShadow: {
+              soft: '0 18px 50px -22px rgba(15, 23, 42, 0.26)'
+            }
+          }
+        }
+      };
+    </script>
+    <style>
+      body {
+        font-family: Inter, 'Segoe UI', sans-serif;
+        background: linear-gradient(180deg, #f8fbff 0%, #eef5fb 100%);
+      }
+    </style>
+  </head>
+  <body class="text-slate-800">
+    <header class="bg-slate-950 text-white">
+      <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+        <nav class="flex items-center justify-between">
+          <a href="index.html" class="flex items-center gap-3">
+            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-400 to-brand-700 text-lg font-bold">IP</div>
+            <div>
+              <div class="text-lg font-bold tracking-tight">ImmoPreBid</div>
+              <div class="text-[10px] uppercase tracking-[0.26em] text-slate-300">Versteigerungsvorverkauf</div>
+            </div>
+          </a>
+          <div class="flex items-center gap-3">
+            <a href="index.html" class="rounded-full border border-slate-700 px-4 py-2 text-sm font-medium text-slate-200 transition hover:border-slate-500 hover:text-white">Zurück zum Markt</a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+      <div id="detailContent" class="space-y-8"></div>
+    </main>
+
+    <script>
+      const properties = {
+        'villa-hannover': {
+          title: 'Schloßstraße 18',
+          location: 'Peine / Hannover',
+          description: 'Modernes Einfamilienhaus mit viel Licht, ruhiger Lage und gutem Zugang zu Schulen, Einkauf und Verkehrsanbindung.',
+          valuation: 665000,
+          currentBid: 538000,
+          image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80',
+          area: '162 m²',
+          rooms: '5,5 Zimmer',
+          year: '2004',
+          type: 'Einfamilienhaus',
+          city: 'Peine',
+          deadline: '2026-09-19T18:00:00'
+        },
+        'apartment-hannover': {
+          title: 'Am Maschpark 7',
+          location: 'Hannover',
+          description: 'Atraktives Wohnobjekt mit gutem Stadtteilprofil, großzügiger Wohnfläche und ausgewogener Mieter- und Investitionsperspektive.',
+          valuation: 420000,
+          currentBid: 359500,
+          image: 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80',
+          area: '91 m²',
+          rooms: '4 Zimmer',
+          year: '1998',
+          type: 'Wohnung',
+          city: 'Hannover',
+          deadline: '2026-09-17T12:15:00'
+        },
+        'villa-langenhagen': {
+          title: 'Bergweg 3',
+          location: 'Langenhagen',
+          description: 'Sehr ruhiges Einfamilienhaus mit hochwertiger Ausstattung, Gartenfläche und klarer Kaufperspektive für langfristige Wohnnutzung.',
+          valuation: 830000,
+          currentBid: 676000,
+          image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
+          area: '214 m²',
+          rooms: '6 Zimmer',
+          year: '2011',
+          type: 'Einfamilienhaus',
+          city: 'Langenhagen',
+          deadline: '2026-09-20T09:30:00'
+        }
+      };
+
+      function money(value) {
+        return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(value);
+      }
+
+      function formatCountdown(deadline) {
+        const diff = new Date(deadline).getTime() - Date.now();
+        if (diff <= 0) return 'Auktion beendet';
+        const totalSeconds = Math.floor(diff / 1000);
+        const days = Math.floor(totalSeconds / 86400);
+        const hours = Math.floor((totalSeconds % 86400) / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        return `Noch ${days} Tage ${hours} Std. ${minutes} Min.`;
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      const propertyId = params.get('property') || 'villa-hannover';
+      const property = properties[propertyId];
+
+      document.getElementById('detailContent').innerHTML = `
+        <section class="overflow-hidden rounded-[30px] border border-slate-200 bg-white shadow-soft">
+          <img src="${property.image}" alt="${property.title}" class="h-80 w-full object-cover lg:h-[420px]" />
+          <div class="p-6 sm:p-8 lg:p-10">
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-[0.22em] text-brand-700">Objekt</p>
+                <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-900 lg:text-5xl">${property.title}</h1>
+                <p class="mt-3 text-lg text-slate-600">${property.location}</p>
+              </div>
+              <div class="rounded-2xl border border-brand-100 bg-brand-50 px-4 py-3 text-right">
+                <div class="text-[11px] uppercase tracking-[0.18em] text-brand-700">Verkehrswert</div>
+                <div class="mt-1 text-2xl font-bold text-slate-900">${money(property.valuation)}</div>
+              </div>
+            </div>
+
+            <div class="mt-8 grid gap-4 sm:grid-cols-4">
+              <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div class="text-[11px] uppercase tracking-[0.18em] text-slate-400">Wohnfläche</div><div class="mt-2 text-xl font-bold text-slate-900">${property.area}</div></div>
+              <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div class="text-[11px] uppercase tracking-[0.18em] text-slate-400">Zimmer</div><div class="mt-2 text-xl font-bold text-slate-900">${property.rooms}</div></div>
+              <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div class="text-[11px] uppercase tracking-[0.18em] text-slate-400">Baujahr</div><div class="mt-2 text-xl font-bold text-slate-900">${property.year}</div></div>
+              <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div class="text-[11px] uppercase tracking-[0.18em] text-slate-400">Typ</div><div class="mt-2 text-xl font-bold text-slate-900">${property.type}</div></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+          <div class="rounded-[30px] border border-slate-200 bg-white p-6 shadow-soft sm:p-8">
+            <h2 class="text-2xl font-bold text-slate-900">Beschreibung</h2>
+            <p class="mt-4 text-base leading-7 text-slate-600">${property.description}</p>
+
+            <div class="mt-8 rounded-[24px] border border-slate-200 bg-slate-50 p-5">
+              <h3 class="text-xl font-bold text-slate-900">Verfahren für den Bieter</h3>
+              <ol class="mt-4 space-y-4 text-sm leading-6 text-slate-600">
+                <li><span class="font-semibold text-slate-900">1. Online mitbieten:</span> Geben Sie Ihr Gebot innerhalb der einwöchigen Frist verbindlich online ab.</li>
+                <li><span class="font-semibold text-slate-900">2. Bank erhält Kontaktdaten:</span> Nach Auktionsende wird das höchste verifizierte Angebot an die Gläubigerbank weitergeleitet.</li>
+                <li><span class="font-semibold text-slate-900">3. Zuschlag durch Bank:</span> Die Gläubigerbank entscheidet nach Prüfung über den freihändigen Verkauf.</li>
+              </ol>
+            </div>
+          </div>
+
+          <aside class="rounded-[30px] border border-slate-200 bg-slate-50 p-6 shadow-soft sm:p-8">
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                <div class="text-[11px] uppercase tracking-[0.18em] text-slate-400">Aktuelles Höchstgebot</div>
+                <div class="mt-2 text-3xl font-bold text-slate-900">${money(property.currentBid)}</div>
+              </div>
+              <span class="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-700">Live</span>
+            </div>
+
+            <div class="mt-6 rounded-2xl border border-slate-200 bg-white p-4">
+              <div class="text-[11px] uppercase tracking-[0.18em] text-slate-400">Auktion endet in</div>
+              <div class="mt-2 text-lg font-semibold text-slate-900">${formatCountdown(property.deadline)}</div>
+            </div>
+
+            <form class="mt-6 space-y-4">
+              <div>
+                <label class="mb-2 block text-sm font-semibold text-slate-700">Gebot abgeben</label>
+                <div class="relative">
+                  <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-500">€</span>
+                  <input type="number" min="1000" step="500" placeholder="z.B. 560000" class="w-full rounded-2xl border border-slate-300 bg-white py-3 pl-8 pr-4 text-base font-medium text-slate-900 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100" />
+                </div>
+              </div>
+              <div class="rounded-2xl border border-brand-100 bg-brand-50 p-3 text-xs leading-5 text-brand-700">Hinweis: Verifizierte Identität und Finanzierungsbestätigung sind für die Teilnahme erforderlich.</div>
+              <button type="submit" class="w-full rounded-full bg-brand-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-500">Gebot bestätigen</button>
+            </form>
+          </aside>
+        </section>
+      `;
+
+      document.querySelector('form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert('Gebot wurde für Prüfung aufgenommen.');
+      });
+    </script>
+  </body>
+</html>
