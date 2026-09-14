@@ -177,6 +177,7 @@
                 <option value="all">Alle Typen</option>
                 <option value="Wohnung">Wohnung</option>
                 <option value="Einfamilienhaus">Einfamilienhaus</option>
+                <option value="Zwangsversteigerung">Zwangsversteigerung</option>
               </select>
             </label>
           </div>
@@ -322,6 +323,7 @@
 
     <script>
       const properties = [
+        { id: 'arztpraxis-peine', address: 'Berliner Ring 4', city: 'Peine', location: 'Peine', type: 'Zwangsversteigerung', valuation: 66900, currentBid: null, bidders: 0, rooms: 'Arztpraxis', area: '148 m²', year: '1980', image: 'https://images.unsplash.com/photo-1516841273335-e39b37888115?auto=format&fit=crop&w=1200&q=80', deadline: '2026-10-06T10:00:00', caseNumber: '07 K 19/25', court: 'Amtsgericht Peine', sourceUrl: 'https://immobilienpool.de/zwangsversteigerungen/12-anteil-an-arztpraxis.1317186', officialUrl: 'https://upload.immobilienpool.de/immobilien/00/01/31/71/86/TAB-07-K-19-25-pe.pdf' },
         { id: 'villa-hannover', address: 'Schloßstraße 18', city: 'Peine', location: 'Peine / Hannover', type: 'Einfamilienhaus', valuation: 665000, currentBid: 538000, bidders: 8, rooms: '5,5', area: '162 m²', year: '2004', image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80', deadline: '2026-09-19T18:00:00' },
         { id: 'apartment-hannover', address: 'Am Maschpark 7', city: 'Hannover', location: 'Hannover', type: 'Wohnung', valuation: 420000, currentBid: 359500, bidders: 11, rooms: '4', area: '91 m²', year: '1998', image: 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80', deadline: '2026-09-17T12:15:00' },
         { id: 'villa-langenhagen', address: 'Bergweg 3', city: 'Langenhagen', location: 'Langenhagen', type: 'Einfamilienhaus', valuation: 830000, currentBid: 676000, bidders: 6, rooms: '6', area: '214 m²', year: '2011', image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80', deadline: '2026-09-20T09:30:00' }
@@ -386,7 +388,7 @@
             <img src="${property.image}" alt="${property.address}" class="h-64 w-full object-cover" />
             <div class="p-6">
               <div class="flex items-center justify-between gap-3 text-sm">
-                <span class="rounded-full bg-brand-50 px-2.5 py-1 font-medium text-brand-700">${property.location}</span>
+                <span class="rounded-full ${property.type === 'Zwangsversteigerung' ? 'bg-amber-50 text-amber-700' : 'bg-brand-50 text-brand-700'} px-2.5 py-1 font-medium">${property.location}</span>
                 <span class="font-semibold text-slate-500">Verkehrswert ${money(property.valuation)}</span>
               </div>
               <h3 class="mt-4 text-2xl font-bold tracking-tight text-slate-900">${property.address}</h3>
@@ -399,7 +401,7 @@
                 <div class="flex items-center justify-between">
                   <div>
                     <div class="text-[11px] uppercase tracking-[0.18em] text-slate-400">Akt. Höchstgebot</div>
-                    <div class="mt-1 text-2xl font-bold text-slate-900">${money(property.currentBid)}</div>
+                    <div class="mt-1 text-2xl font-bold text-slate-900">${property.currentBid === null ? 'Noch kein Gebot' : money(property.currentBid)}</div>
                   </div>
                   <div class="text-right">
                     <div class="text-[11px] uppercase tracking-[0.18em] text-slate-400">Bieter</div>
@@ -407,11 +409,12 @@
                   </div>
                 </div>
                 <div class="mt-4 flex items-center justify-between gap-3">
-                  <div class="countdown text-sm font-medium text-slate-600" data-deadline="${property.deadline}">${formatCountdown(property.deadline)}</div>
+                  <div class="countdown text-sm font-medium text-slate-600" data-deadline="${property.deadline}">${property.type === 'Zwangsversteigerung' ? 'Termin: ' : ''}${formatCountdown(property.deadline)}</div>
                   <div class="flex gap-2">
                     <a href="details.html?property=${property.id}" class="inline-flex items-center rounded-full bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-500">Details</a>
                   </div>
                 </div>
+                ${property.sourceUrl ? `<div class="mt-3 flex flex-wrap gap-3 text-xs text-slate-500"><span class="rounded-full bg-amber-100 px-2.5 py-1 font-semibold text-amber-800">Amtlicher ZVG-Termin</span><a href="${property.sourceUrl}" target="_blank" rel="noopener noreferrer" class="underline hover:text-slate-900">Quelle ansehen</a></div>` : ''}
               </div>
             </div>
           </article>
