@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="no-referrer" />
+    <title>Sitzungssteuerung</title>
+    <style>
+      :root {
+        --bg: #f5f7fb;
+        --panel: #ffffff;
+        --ink: #111827;
+        --muted: #4b5563;
+        --border: #d1d5db;
+        --primary: #1d4ed8;
+        --danger: #b91c1c;
+        --success: #166534;
+      }
+      * { box-sizing: border-box; }
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+      }
+      .page {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 24px 18px 48px;
+      }
+      h1, h2, h3 { margin-top: 0; }
+      .grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; }
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 18px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      }
+      label { display: block; font-weight: 600; margin-bottom: 8px; }
+      input, button { font: inherit; }
+      input[type="text"], input[type="number"] {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        margin-bottom: 12px;
+      }
+      .inline-input { display: flex; gap: 8px; align-items: center; }
+      .money-box { position: relative; }
+      .money-box span {
+        position: absolute; left: 12px; top: 11px; font-weight: 700;
+      }
+      .money-box input { padding-left: 28px; }
+      .button-row { display: flex; flex-wrap: wrap; gap: 8px; }
+      button {
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 14px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      button.secondary { background: #e5e7eb; color: var(--ink); }
+      button.warning { background: var(--danger); }
+      button:disabled { opacity: 0.5; cursor: not-allowed; }
+      .status { margin-top: 12px; color: var(--muted); font-size: 0.95rem; }
+      .status.good { color: var(--success); }
+      .status.bad { color: var(--danger); }
+      .license-box {
+        border: 1px solid var(--border);
+        background: #f9fafb;
+        padding: 12px;
+        border-radius: 8px;
+        margin: 12px 0;
+        line-height: 1.5;
+      }
+      .checkbox-row { display: flex; align-items: flex-start; gap: 10px; }
+      .checkbox-row input { margin-top: 3px; }
+      .tiny { font-size: 0.85rem; color: var(--muted); }
+      .session-key { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.12em; }
+      .link-box {
+        width: 100%;
+        background: #f3f4f6;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 10px;
+        font-family: monospace;
+      }
+      .qr-wrap {
+        display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center;
+      }
+      .qr-box {
+        width: 220px; height: 220px; border: 1px solid var(--border); background: #fff; display: grid; place-items: center; padding: 8px;
+      }
+      #qrImage { max-width: 100%; max-height: 100%; }
+      .notice { margin-top: 10px; font-size: 0.9rem; color: var(--muted); }
+      .public-display-preview {
+        border: 2px solid var(--primary);
+        border-radius: 12px;
+        background: #f8fafc;
+        padding: 18px;
+        min-height: 280px;
+      }
+      .amount-large {
+        font-size: clamp(2rem, 4vw, 4rem);
+        font-weight: 700;
+        text-align: center;
+        margin: 20px 0;
+      }
+      .countdown {
+        font-size: clamp(2.2rem, 5vw, 4rem);
+        text-align: center;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0,0,0,0);
+        border: 0;
+      }
+      @media (max-width: 800px) {
+        .grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <h1>Sitzungssteuerung</h1>
+      <div id="errorBox" class="status bad" role="alert" aria-live="assertive"></div>
+
+      <div class="grid">
+        <section class="card">
+          <h2>Verbindung</h2>
+          <div id="sessionInfoBox">
+            <p class="tiny">Noch keine Sitzung aktiv.</p>
+            <div id="createSessionForm">
+              <p>Die Sitzung ist nur mit gültiger Jahreslizenz nutzbar.</p>
+              <div class="license-box">
+                Die Nutzung dieser Anwendung ist nur mit gültiger Jahreslizenz zulässig. Die Jahreslizenz kostet 289 € und kann per E-Mail unter <a id="licenseLink" href="mailto:kontakt@example.de">kontakt@example.de</a> beantragt werden.
+              </div>
+              <label class="checkbox-row">
+                <input id="licenseConfirm" type="checkbox" />
+                <span>Ich bestätige, dass für das nutzende Amtsgericht eine gültige Jahreslizenz vorliegt.</span>
+              </label>
+              <label for="amtsgericht">Amtsgericht</label>
+              <input id="amtsgericht" type="text" placeholder="Amtsgericht" />
+              <label for="sitzungsbezeichnung">Aktenzeichen / Sitzungsbezeichnung</label>
+              <input id="sitzungsbezeichnung" type="text" placeholder="Wird auf dem Anzeigebildschirm sichtbar" />
+              <button id="createSessionButton" disabled> Sitzung erstellen </button>
+            </div>
+          </div>
+
+          <div id="activeSessionBox" style="display:none;">
+            <div>
+              <strong>Status:</strong> <span id="sessionStatus">Aktiv</span>
+            </div>
+            <div class="tiny" id="sessionMetaText"></div>
+            <div class="notice">Personen mit diesem Link oder QR-Code können die Sitzungsanzeige aufrufen.</div>
+            <div style="margin-top: 16px;">
+              <h3>Sitzungsanzeige öffnen und verbinden</h3>
+              <div class="button-row">
+                <a id="openDisplayLink" href="" target="_blank" rel="noopener noreferrer"><button type="button">Anzeige in neuem Tab öffnen</button></a>
+              </div>
+            </div>
+            <div class="qr-wrap" style="margin-top: 16px;">
+              <div><strong>Auf einem anderen Gerät öffnen</strong></div>
+              <div class="qr-box"><img id="qrImage" alt="QR-Code für die Sitzungsanzeige" /></div>
+              <button id="qrZoomButton" class="secondary" type="button">QR-Code vergrößern</button>
+              <div class="tiny">Das Anzeigegerät muss die Anwendung über das Netzwerk erreichen können.</div>
+            </div>
+            <div style="margin-top: 16px;">
+              <label for="publicLinkInput">Anzeigelink für diese Sitzung</label>
+              <input id="publicLinkInput" class="link-box" readonly type="text" />
+              <div class="button-row">
+                <button id="copyLinkButton" type="button">Link kopieren</button>
+              </div>
+            </div>
+            <div style="margin-top: 16px;">
+              <label>Session-Key</label>
+              <div id="sessionKeyDisplay" class="session-key">-</div>
+              <div class="button-row" style="margin-top: 8px;">
+                <button id="copyKeyButton" class="secondary" type="button">Schlüssel kopieren</button>
+              </div>
+            </div>
+            <div id="publicUrlText" class="tiny" style="margin-top:12px;"></div>
+            <div class="notice">Die Steuerung ist an diesen Browser gebunden. Verwenden Sie für diese Sitzung weiterhin diesen Browser.</div>
+          </div>
+        </section>
+
+      </div>
+
+      <div class="grid" style="margin-top:20px;">
+        <section class="card">
+          <h2>Zeitsteuerung</h2>
+          <label for="durationInput">Vorbereitete Dauer (Minuten)</label>
+          <input id="durationInput" type="number" min="1" max="240" value="30" />
+          <div class="button-row">
+            <button id="startTimerButton" type="button">Zeit starten</button>
+            <button id="extendPlus1" class="secondary" type="button">+1 Minute</button>
+            <button id="extendPlus5" class="secondary" type="button">+5 Minuten</button>
+            <button id="extendPlus10" class="secondary" type="button">+10 Minuten</button>
+            <button id="resetTimerButton" class="secondary" type="button">Zeit zurücksetzen</button>
+          </div>
+          <div class="status" id="timerStatusText">Timerstatus: Noch nicht gestartet</div>
+          <div class="countdown" id="countdownText">30:00</div>
+        </section>
+
+        <section class="card">
+          <h2>Öffentliche Vorschau</h2>
+          <div class="public-display-preview">
+            <div id="previewCourt">-</div>
+            <div id="previewTitle" class="tiny">-</div>
+            <div class="amount-large" id="previewBid">Noch kein Gebot erfasst</div>
+            <div class="tiny" style="text-align:center;">Verbleibende Zeit</div>
+            <div class="countdown" id="previewCountdown">30:00</div>
+            <div class="tiny" id="previewTimerStatus" style="text-align:center;">Noch nicht gestartet</div>
+          </div>
+          <div class="status" id="connectionStatus">Verbindungsstatus: Verbunden</div>
+          <div class="status" id="saveStatus">Letzte erfolgreiche Speicherung: -</div>
+        </section>
+      </div>
+
+      <section class="card" style="margin-top:20px;">
+        <h2>Höchstgebot</h2>
+        <div class="grid">
+          <div>
+            <label for="bidderSelect">Höchstbietender (optional)</label>
+            <select id="bidderSelect">
+              <option value="">Kein Name ausgewählt</option>
+            </select>
+            <label for="newBidderInput">Neuen Bieter hinzufügen</label>
+            <div class="inline-input">
+              <input id="newBidderInput" type="text" placeholder="Name des Bieters" />
+              <button id="addBidderButton" class="secondary" type="button">Hinzufügen</button>
+            </div>
+          </div>
+          <div>
+            <label for="newBidInput">Neues Höchstgebot</label>
+            <div class="money-box">
+              <span>€</span>
+              <input id="newBidInput" type="text" placeholder="150.000,50" />
+            </div>
+            <div class="button-row">
+              <button id="submitBidButton" type="button">Gebot übernehmen</button>
+              <button id="resetBidButton" class="secondary" type="button">Gebot zurücksetzen</button>
+            </div>
+            <div class="status" id="currentBidLabel">Aktuelles Höchstgebot: Noch kein Gebot erfasst</div>
+          </div>
+        </div>
+      </section>
+
+      <div style="margin-top: 20px;">
+        <button id="endSessionButton" class="warning" type="button">Sitzung beenden</button>
+      </div>
+
+      <div class="license-box" style="margin-top:20px;">
+        <strong>Lizenzhinweis:</strong> Die Nutzung dieser Anwendung ist nur mit gültiger Jahreslizenz zulässig. Die Jahreslizenz kostet 289 € und kann per E-Mail unter <a id="footerLicenseLink" href="mailto:kontakt@example.de">kontakt@example.de</a> beantragt werden.
+      </div>
+    </div>
+
+    <div id="qrDialog" class="sr-only" aria-modal="true" role="dialog">
+      <div style="position:fixed; inset:0; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; padding:16px;">
+        <div style="background:#fff; border-radius:12px; padding:24px; max-width:90vw; max-height:90vh; overflow:auto;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <strong>QR-Code vergrößert</strong>
+            <button id="closeQrDialog" type="button">Schließen</button>
+          </div>
+          <img id="qrDialogImage" src="" alt="Vergrößerter QR-Code" style="width: min(80vw, 500px); height: auto; display:block;" />
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/js/steuerung.js"></script>
+  </body>
+</html>

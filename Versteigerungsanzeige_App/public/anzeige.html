@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="no-referrer" />
+    <title>Sitzungsanzeige</title>
+    <style>
+      :root {
+        --bg: #f8fafc;
+        --ink: #111827;
+        --muted: #374151;
+        --accent: #1d4ed8;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: Arial, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .screen {
+        width: min(1200px, 94vw);
+        min-height: 90vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 32px;
+      }
+      .court { font-size: clamp(1.1rem, 2vw, 2rem); font-weight: 600; }
+      .title { font-size: clamp(0.9rem, 1.5vw, 1.4rem); color: var(--muted); margin-top: 8px; }
+      .label { font-size: clamp(1rem, 1.8vw, 1.8rem); margin-top: 18px; }
+      .amount { font-size: clamp(3rem, 8vw, 9rem); font-weight: 700; letter-spacing: 0.04em; }
+      .bidder { min-height: 1.5em; color: var(--muted); font-size: clamp(1rem, 1.8vw, 1.8rem); }
+      .time-label { font-size: clamp(1rem, 1.8vw, 2rem); margin-top: 12px; }
+      .countdown { font-size: clamp(2.5rem, 8vw, 7rem); font-weight: 700; font-variant-numeric: tabular-nums; }
+      .statusline { margin-top: 10px; color: var(--muted); font-size: clamp(0.9rem, 1.2vw, 1.3rem); }
+      .note { margin-top: 18px; color: var(--muted); font-size: clamp(0.75rem, 1vw, 1rem); }
+      button {
+        margin-top: 18px;
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 18px;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+      .hidden { display: none; }
+    </style>
+  </head>
+  <body>
+    <div class="screen">
+      <div id="court" class="court">-</div>
+      <div id="title" class="title">-</div>
+      <div id="amountLabel" class="label">Aktuelles Höchstgebot</div>
+      <div id="amount" class="amount">Noch kein Gebot erfasst</div>
+      <div id="bidder" class="bidder"></div>
+      <div id="timeLabel" class="time-label">Verbleibende Zeit</div>
+      <div id="countdown" class="countdown">30:00</div>
+      <div id="statusline" class="statusline">Noch nicht gestartet</div>
+      <div id="note" class="note">Maßgeblich sind die Bekanntgaben der Sitzungsleitung.</div>
+      <button id="connectAnother" type="button">Andere Sitzung verbinden</button>
+      <div id="connectForm" style="margin-top:22px; width:min(420px, 90vw);">
+        <label for="sessionKeyInput" style="display:block; margin-bottom:8px; font-weight:600;">Sitzungsschlüssel</label>
+        <input id="sessionKeyInput" type="text" placeholder="ABCD-EFGH-JKLM" style="width:100%; padding:10px; font-size:1rem;" />
+        <button id="connectButton" type="button" style="margin-top:12px; width:100%;">Anzeige verbinden</button>
+        <div id="errorBox" class="statusline" style="margin-top:12px; color:#b91c1c; display:none;"></div>
+      </div>
+    </div>
+    <script type="module" src="/js/anzeige.js"></script>
+  </body>
+</html>
